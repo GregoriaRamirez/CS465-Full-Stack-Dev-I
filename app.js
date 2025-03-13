@@ -3,46 +3,51 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var handlebars = require('hbs');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./app_server/routes/index');
+var usersRouter = require('./app_server/routes/users');
+var travelRouter = require('./app_server/routes/travel');
 
 var app = express();
 
-// View engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+// Disable caching
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');  // Prevent caching of resources
+  next();
+});
 
-// Middleware setup
+// view engine setup
+app.set('views', path.join(__dirname, 'app_server', 'views'));  // Setting the views directory
+app.set('view engine', 'hbs');  // Setting the view engine to handlebars
+
+// Register Handlebars partials
+handlebars.registerPartials(path.join(__dirname, 'app_server', 'views', 'partials'));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-// Serve static files properly
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Debugging: Check if public folder is accessible
-console.log("Serving static files from:", path.join(__dirname, 'public'));
-
-// Define routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/travel', travelRouter);
 
-// Catch 404 and forward to error handler
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// Error handler
+// error handler
 app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // Render the error page
+  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
 
-// Export the app module
 module.exports = app;
