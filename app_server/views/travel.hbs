@@ -2,13 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Dive Sites - Bhaccasyoniztas Beach Resort Website Template</title>
+    <title>Dive Sites - Bhaccasyoniztas Beach Resort</title>
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
     <div id="background">
         <div id="page">
-            {{> header }}
+            {{> header}}
             <div id="contents">
                 <div class="box">
                     <div>
@@ -19,12 +19,7 @@
                                 <li>
                                     <a href="travel.html"><img src="{{this.image}}" alt="{{this.name}}"></a>
                                     <h2><a href="travel.html">{{this.name}}</a></h2>
-                                    <p>
-                                        {{this.description1}}
-                                    </p>
-                                    <p>
-                                        {{this.description2}}
-                                    </p>
+                                    <p>{{{this.description}}}</p> 
                                 </li>
                                 {{/each}}
                             </ul>
@@ -32,8 +27,8 @@
                     </div>
                 </div>
             </div>
+            {{> footer}}
         </div>
-        {{> footer }}
     </div>
 </body>
 </html>

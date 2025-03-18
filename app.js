@@ -19,10 +19,12 @@ app.use((req, res, next) => {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'app_server', 'views'));  // Setting the views directory
-app.set('view engine', 'hbs');  // Setting the view engine to handlebars
+
 
 // Register Handlebars partials
-handlebars.registerPartials(path.join(__dirname, 'app_server', 'views', 'partials'));
+handlebars.registerPartials(__dirname + '/app_server/views/partials');
+
+app.set('view engine', 'hbs'); 
 
 app.use(logger('dev'));
 app.use(express.json());
