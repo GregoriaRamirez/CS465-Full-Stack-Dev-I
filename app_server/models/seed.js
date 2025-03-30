@@ -1,31 +1,28 @@
-const mongoose = require('mongoose');
-const Trip = require('./travlr'); // Ensure travlr.js exists
-const tripsData = require('../data/trips.json'); // Adjust path to data
+const mongoose = require('./db');  
+const Trip = require('./travlr');   
 
-// Convert the start date string to Date objects
-tripsData.forEach(trip => {
-  trip.start = new Date(trip.start);
-});
+var fs = require('fs');
+var trips = JSON.parse(fs.readFileSync('./data/trips.json', 'utf8'));  
 
-const dbURI = 'mongodb://127.0.0.1/travlr';
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-mongoose.connection.on('connected', async () => {
-    console.log(`Mongoose connected to ${dbURI}`);
-
+// Seeding function
+const seedDB = async () => {
     try {
+        // Deleting existing data
         await Trip.deleteMany({});
-        console.log('Existing trips deleted.');
 
-        await Trip.insertMany(tripsData);
-        console.log('Trips successfully seeded.');
-    } catch (err) {
-        console.error('Error seeding trips:', err);
-    } finally {
-        mongoose.connection.close();
+        // Inserting new data from the trips.json file
+        await Trip.insertMany(trips);
+
+        console.log('Database seeded successfully');
+    } catch (error) {
+        console.error('Error seeding database:', error);
     }
-});
+};
 
-mongoose.connection.on('error', err => {
-    console.log('Mongoose connection error:', err);
+// Run seeding function
+seedDB().then(async () => {
+    // Close the MongoDB connection after seeding
+    await mongoose.connection.close();
+    console.log('Connection closed');
+    process.exit(0);  
 });
