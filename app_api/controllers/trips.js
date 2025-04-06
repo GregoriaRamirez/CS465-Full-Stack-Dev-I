@@ -1,36 +1,36 @@
-const fs = require('fs');
-const path = require('path');
 
-// GET: /trips - list all of the trips from trips.json
+
+// GET: /api/trips - list all trips
 const tripsList = async (req, res) => {
-    // Define the path to the trips.json file
-    const filePath = path.join(__dirname, '..', 'controllers', 'data', 'trips.json');
+    try {
+        if (trips.length === 0) {
+            return res.status(404).json({ message: 'No trips found' });
+        }
+        return res.status(200).json(trips);
+    } catch (error) {
+        console.error('Error fetching trips list:', error);
+        return res.status(500).json({ message: 'Server error', error });
+    }
+};
 
-    // Read the trips.json file
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading trips.json:', err);
-            return res.status(500).json({ message: 'Server error', error: err });
+// GET: /api/trips/:tripCode - return one trip
+const tripsReadOne = async (req, res) => {
+    try {
+        const tripCode = req.params.tripCode;
+        const trip = trips.find(t => t.code === tripCode);
+
+        if (!trip) {
+            return res.status(404).json({ message: 'Trip not found' });
         }
 
-        try {
-            // Parse the JSON data
-            const trips = JSON.parse(data);
-
-            if (trips.length === 0) { // No trips found in the JSON file
-                return res.status(404).json({ message: 'No trips found' });
-            }
-
-            // Return the list of trips as JSON
-            return res.status(200).json(trips);
-
-        } catch (parseError) {
-            console.error('Error parsing trips.json:', parseError);
-            return res.status(500).json({ message: 'Error parsing JSON', error: parseError });
-        }
-    });
+        return res.status(200).json(trip);
+    } catch (error) {
+        console.error('Error fetching trip:', error);
+        return res.status(500).json({ message: 'Server error', error });
+    }
 };
 
 module.exports = {
-    tripsList
+    tripsList,
+    tripsReadOne
 };

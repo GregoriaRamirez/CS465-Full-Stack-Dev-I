@@ -8,8 +8,6 @@ const dbURI = `mongodb://${host}/travlr`;
 // Build the connection string and set connection options
 const connect = () => {
     mongoose.connect(dbURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         serverSelectionTimeoutMS: 50000, // Set a longer timeout for server selection
     })
     .then(() => console.log(`Mongoose connected to ${dbURI}`))
@@ -36,7 +34,7 @@ if (process.platform === 'win32') {
         output: process.stdout
     });
     rl.on('SIGINT', () => {
-        process.emit("SIGINT");
+        process.exit(0);  // Gracefully exit on SIGINT for Windows
     });
 }
 
