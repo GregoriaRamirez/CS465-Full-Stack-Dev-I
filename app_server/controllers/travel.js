@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
 
+
 // API endpoint and fetch options
 const tripsEndpoint = "http://localhost:3000/api/trips";
 const options = {
@@ -11,6 +12,8 @@ const options = {
     'Content-Type': 'application/json'
   }
 };
+
+
 
 // Path to local trips.json as a fallback
 const tripsFilePath = path.join(__dirname, '..', '..', 'app_server', 'data', 'trips.json');
