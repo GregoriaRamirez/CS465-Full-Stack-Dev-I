@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -5,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const hbs = require('hbs');
 const cors = require('cors');
+//app.options('*', cors()); 
 
 const indexRouter = require('./app_server/routes/index');
 const usersRouter = require('./app_server/routes/users');
@@ -29,20 +32,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Enable CORS
+ // Enable CORS
+app.use(cors({
+origin: 'http://localhost:4200', 
+ methods: ['GET', 'POST', 'PUT', 'DELETE'],
+ allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Authorization'],
+}));  
 
-app.use(cors({ origin: 'http://localhost:4200' }));
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  next();
-});
+
 
 // Route setup
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
 app.use('/api', apiRouter);
-app.use('/api/trips', tripsRouter);
+app.use('/', indexRouter);
+
+
+
 
 // Catch 404 errors
 app.use(function(req, res, next) {

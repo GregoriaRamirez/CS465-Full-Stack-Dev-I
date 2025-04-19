@@ -61,13 +61,11 @@ const tripsAddTrip = async (req, res) => {
     // console.log(q);
 };
 
-
-
 // PUT: /api/trips/:tripCode - update one trip
 const tripsUpdateTrip = async (req, res) => {
     try {
-         console.log("Params:", req.params);
-         console.log("Body:", req.body);
+        console.log("Params:", req.params);
+        console.log("Body:", req.body);
 
         const updatedTrip = await Trip.findOneAndUpdate(
             { code: req.params.tripCode },

@@ -1,19 +1,22 @@
 const express = require("express");
 const router = express.Router();
 
-const tripsController = require('../controller/trips');
+const tripsController = require("../controllers/trips");
+const authController = require("../controllers/authentication");
 
+// Auth routes
+router.route("/register").post(authController.register);
+router.route("/login").post(authController.login);
 
-// List all trips
+// Trip routes
 router
   .route("/trips")
   .get(tripsController.tripsList)
-  .post(tripsController.tripsAddTrip);
+  .post(authenticateJWT, tripsController.tripsAddTrip);
 
-// Get one trip by tripCode
 router
   .route("/trips/:tripCode")
-  .get(tripsController.tripsReadOne)
-  .put(tripsController.tripsUpdateTrip);
+  .get(tripsController.tripsFindByCode)
+  .put(authenticateJWT, tripsController.tripsUpdateTrip);
 
 module.exports = router;
