@@ -1,11 +1,14 @@
-<!-- <h1>{{ title}}<h1> -->
+<!-- <h1>{{ title}}</h1> -->
+
 <nav class="navbar navbar-default"> 
   <div class="container-fluid"> 
     <a class="navbar-brand" href="#">{{ title }}</a> 
   </div> 
 </nav>
 
+<!-- <app-trip-listing></app-trip-listing> -->
+<app-navbar></app-navbar>   
+
 <div class="container"> 
-  <!-- <app-trip-listing></app-trip-listing> -->
-  <router-outlet></router-outlet> <!-- This is where routed components will be displayed -->
+  <router-outlet></router-outlet> 
 </div>

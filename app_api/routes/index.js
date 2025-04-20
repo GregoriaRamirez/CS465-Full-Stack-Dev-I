@@ -4,8 +4,8 @@ const router = express.Router();
 const tripsController = require("../controllers/trips");
 const authController = require("../controllers/authentication");
 
-
-const { authenticateJWT } = require("../middlewares/auth"); // adjust path if different
+// Import the middleware
+const authenticateJWT = require("../middlewares/authenticateJWT");
 
 // Auth routes
 router
