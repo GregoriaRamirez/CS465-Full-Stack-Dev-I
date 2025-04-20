@@ -4,9 +4,17 @@ const router = express.Router();
 const tripsController = require("../controllers/trips");
 const authController = require("../controllers/authentication");
 
+
+const { authenticateJWT } = require("../middlewares/auth"); // adjust path if different
+
 // Auth routes
-router.route("/register").post(authController.register);
-router.route("/login").post(authController.login);
+router
+  .route("/register")
+  .post(authController.register);
+
+router
+  .route("/login")
+  .post(authController.login);
 
 // Trip routes
 router
@@ -16,7 +24,7 @@ router
 
 router
   .route("/trips/:tripCode")
-  .get(tripsController.tripsFindByCode)
+  .get(tripsController.tripsReadOne)
   .put(authenticateJWT, tripsController.tripsUpdateTrip);
 
 module.exports = router;

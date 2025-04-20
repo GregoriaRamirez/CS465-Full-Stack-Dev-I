@@ -13,10 +13,11 @@ const indexRouter = require('./app_server/routes/index');
 const usersRouter = require('./app_server/routes/users');
 const travelRouter = require('./app_server/routes/travel');
 const apiRouter = require('./app_api/routes/index');
-
+const passport = require('./app_api/config/passport');
 
 // Bring in the database
 require('./app_api/models/db');
+require('./app_api/config/passport');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
  // Enable CORS
 app.use(cors({
@@ -40,7 +42,6 @@ origin: 'http://localhost:4200',
 }));  
 
 
-
 // Route setup
 app.use('/users', usersRouter);
 app.use('/travel', travelRouter);
@@ -48,11 +49,20 @@ app.use('/api', apiRouter);
 app.use('/', indexRouter);
 
 
-
-
 // Catch 404 errors
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+// Catch unauthorized errors and create 401
+app.use((err, req, res, next) => { 
+  if (err.name === 'UnauthorizedError') {
+    res
+      .status(401)
+      .json({ "message": err.name + ": " + err.message });
+  } else {
+    next(err); 
+  }
 });
 
 // Error handler

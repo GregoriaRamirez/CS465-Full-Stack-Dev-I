@@ -26,24 +26,24 @@ userSchema.methods.setPassword = function(password) {
 
 // Method to validate password
 userSchema.methods.validPassword = function(password) {
-  const hash = crypto
+  var hash = crypto
     .pbkdf2Sync(password, this.salt, 1000, 64, 'sha512')
     .toString('hex');
   return this.hash === hash;
 };
 
 // Method to generate JWT
-userSchema.methods.generateJwt = function() {
-  return jwt.sign(
-    {
-      _id: this._id,
-      email: this.email,
-      name: this.name
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  );
-};
-
+userSchema.methods.generateJWT = function() { 
+  return jwt.sign( 
+  { // Payload for our JSON Web Token 
+  _id: this._id, 
+  email: this.email, 
+  name: this.name, 
+  },  
+  process.env.JWT_SECRET, //SECRET stored in .env file 
+  { expiresIn: '1h' });   
+  //Token expires an hour from creation 
+  };
+  
 const User = mongoose.model('users', userSchema);
 module.exports = User;
